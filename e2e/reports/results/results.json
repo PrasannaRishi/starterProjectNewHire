@@ -14,7 +14,7 @@
         "name": "Verify user sees language/country options",
         "tags": [
           {
-            "name": "@automated",
+            "name": "@autoReady",
             "line": 4
           }
         ],
@@ -67,6 +67,89 @@
             "keyword": "And ",
             "line": 9,
             "name": "the user sees Change country/region",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ]
+      },
+      {
+        "id": "verify-amazon-search-functionality;verify-user-can-change-country/region",
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "Verify user can change country/region",
+        "tags": [
+          {
+            "name": "@autoReady",
+            "line": 11
+          }
+        ],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "e2e\\support\\hooks.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 13,
+            "name": "the browser is at the Amazon home page",
+            "match": {
+              "location": "e2e\\steps\\Navigation.step.ts:11"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 14,
+            "name": "the user clicks the Flag",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "the user clicks Change country/region",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "the user selects Germany (Deutschland)",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "the user clicks Go to website",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 18,
+            "name": "the user sees the site in German in a new tab",
             "result": {
               "status": "undefined"
             }
