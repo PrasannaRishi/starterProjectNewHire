@@ -1,0 +1,83 @@
+#!/usr/bin/env groovy
+
+node('master') {
+    //Dynamically set directory for code installation and results reporting
+    def directory = 'c:\\workspace\\' + env.JOB_NAME + '_' + env.Browser + '_' + env.Environment + '_' + env.Branch
+    timestamps{
+        //Sync latest code onto specified nodes, and install latest node modules with respect to package.json
+        stage('Sync') {
+            echo 'running build' + env.BUILD_NUMBER
+            syncNode(env.Node, directory, '*/' + env.Branch);
+        }
+        stage('UI Tests') {
+            echo 'Running Web Tests'
+            node(env.Node){
+                bat 'echo Path=%PATH%'
+                dir(directory) {
+                    runUITests();
+                    runReportAndEmailResults(directory, env.Branch);
+                }
+            }
+        }
+    }
+}
+
+def syncNode(nodeName, directory, branch){
+        try{
+            timeout(time: 300, unit: 'SECONDS'){
+                node(nodeName){
+                    dir(directory){
+                        checkout([$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '39c88d02-5507-4f94-b04d-1e54fa137aa2', url: 'git@git01.ops.medplus.com:SoftwareDeliveryAutomation/elabsForHealthcareProfessionals.git']]])
+                        def setPath = 'SET PATH=%PATH%;c:\\users\\zz_c360auto\\appdata\\roaming\\npm;c:\\program files\\nodejs\\'
+                        def installPath = setPath + '\nnpm install'
+                        bat installPath
+                    }
+                }
+            }
+        }
+        catch(all){
+            echo 'VM sync failed.'
+        }
+}
+
+def runUITests(){
+    //Works - setting path for local batch execution
+    def setPath = 'SET PATH=%PATH%;c:\\users\\zz_c360auto\\appdata\\roaming\\npm;c:\\program files\\nodejs\\'
+    try{
+        def runPath = 'protractor ./e2e/conf/' + env.Browser + '_' + env.TestSuite + '.conf.js'
+        def batFile = setPath + '\n' + runPath
+        bat batFile
+    }
+
+    //If any tests fail, mark build unstable
+    catch(all){
+        currentBuild.result = 'UNSTABLE'
+    }
+}
+
+def runReportAndEmailResults(directory, branch){
+    //Run report from results.json file
+    try{
+        def setPath = 'SET PATH=%PATH%;c:\\users\\zz_c360auto\\appdata\\roaming\\npm;c:\\program files\\nodejs\\'         
+        def reporting = 'node index.js'
+        def reportBatFile = setPath + '\n' + reporting
+        bat reportBatFile
+
+        //Email results
+        def reportsDirectory = directory + '\\e2e\\reports\\results'
+        dir(reportsDirectory) {
+            emailext attachmentsPattern: '**/*.png,**/report.html', body: 'Executions Report', subject: '<Enter Project/Execution Details Here>' + branch, to: 'angela.m.fodale@questdiagnostics.com,kamal.m.syed@questdiagnostics.com'
+        }
+        def dateNow = new Date()
+        dateNow = dateNow.format("yyyy-MM-dd_HH-mm-ss")
+        
+        //Rename report according to current timestamp
+        def batCmd = "moveResults.bat " + directory + "\\e2e\\reports " + dateNow
+        bat batCmd
+    }
+
+    //If report generation or renaming fails, print failure response
+    catch(all){
+        echo 'Reporting failed.'
+    }
+}

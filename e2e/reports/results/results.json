@@ -1,0 +1,78 @@
+[
+  {
+    "keyword": "Feature",
+    "name": "Verify Amazon Search Functionality",
+    "line": 1,
+    "id": "verify-amazon-search-functionality",
+    "tags": [],
+    "uri": "e2e\\features\\CountryRegion.feature",
+    "elements": [
+      {
+        "id": "verify-amazon-search-functionality;verify-user-sees-language/country-options",
+        "keyword": "Scenario",
+        "line": 5,
+        "name": "Verify user sees language/country options",
+        "tags": [
+          {
+            "name": "@automated",
+            "line": 4
+          }
+        ],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "e2e\\support\\hooks.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "the browser is at the Amazon home page",
+            "match": {
+              "location": "e2e\\steps\\Navigation.step.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "the user clicks the Flag",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "the user sees Language options",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "the user sees Change country/region",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
