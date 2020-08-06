@@ -1,0 +1,36 @@
+Accuracy
+-Page object classes:
+--Methods perform actions that name/comments express
+-Step definition classes:
+--Call page object methods that accurately perform actions requested by Gherkin
+
+Modularity/Reusability
+-Page object classes:
+--Use of Quest global methods everywhere possible
+--For project-specific behavior: creation/use of project-global methods to reduce intra-project code duplication
+--Store all application-specific code
+--No duplication across methods/classes
+--Methods are data-driven
+--Browser-specific workarounds properly organized/modularized, not repetitive 
+-Step definition classes:
+--Store only references to page object classes
+--Methods are not repetitive across functions/classes (in cases where Gherkin is inefficient, collaboration must take place to fix it rather than duplicate unnecessarily)
+
+Maintainability
+-Locators:
+--Maximum usage of name, id, class values when available and unique
+--Relative xpath only used when absolutely necessary, with comments documenting
+-All methods commented accurately and thoroughly
+-Deprecated code is deleted
+
+Efficiency
+-Browser.sleep: non-existent (exceptions documented through comments)
+-Test data stored in auto data API
+
+Stability
+-UI Automation code stability remains = 90% over time
+-Overall maintenance effort (UI + API) remains under 10% of overall automation time
+-Failures resulting from application changes are updated within one week of initial failure
+
+Other
+-Regular (daily / 3x week) code checkins
